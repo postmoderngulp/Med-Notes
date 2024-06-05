@@ -65,6 +65,10 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(this, HomeActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK));
                 break;
             }
+            else if(userArray[i].email.equals(email) && !userArray[i].password.equals(password)){
+                Toast.makeText(MainActivity.this,"Неверный пароль",Toast.LENGTH_SHORT).show();
+                break;
+            }
         }
 
         if(!isDone){

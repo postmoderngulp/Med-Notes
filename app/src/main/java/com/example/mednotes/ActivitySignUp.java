@@ -80,6 +80,9 @@ public class ActivitySignUp extends AppCompatActivity {
 
 
 
+
+
+
                 byte[] byteImage = new byte[0];
                 Drawable drawable = binding.Avatar.getDrawable();
                 if(drawable instanceof BitmapDrawable){
@@ -89,8 +92,6 @@ public class ActivitySignUp extends AppCompatActivity {
                     byteImage = stream.toByteArray();
                     byteImage = imagemTratada(byteImage);
                 }
-
-
                 User user = new User(email,fullname,"",password,0,"","",byteImage);
                 db.insertUser(user);
                 finish();
@@ -99,8 +100,6 @@ public class ActivitySignUp extends AppCompatActivity {
         });
 
     }
-
-
     private byte[] imagemTratada(byte[] imagem_img){
         while (imagem_img.length > 50000){
             Bitmap bitmap = BitmapFactory.decodeByteArray(imagem_img, 0, imagem_img.length);
@@ -110,7 +109,6 @@ public class ActivitySignUp extends AppCompatActivity {
             imagem_img = stream.toByteArray();
         }
         return imagem_img;
-
     }
 
     public void onSignInClick(View view) {
@@ -119,7 +117,10 @@ public class ActivitySignUp extends AppCompatActivity {
     }
 
     private  void pickImage() {
-        Intent intent = new Intent(MediaStore.ACTION_PICK_IMAGES);
+        Intent intent = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R && android.os.ext.SdkExtensions.getExtensionVersion(android.os.Build.VERSION_CODES.R) >= 2) {
+            intent = new Intent(MediaStore.ACTION_PICK_IMAGES);
+        }
         resultLauncher.launch(intent);
     }
 
@@ -133,11 +134,9 @@ public class ActivitySignUp extends AppCompatActivity {
 
                             Uri imageUri = o.getData().getData();
                             image = new File(imageUri.toString());
-
-
                             binding.Avatar.setImageURI(imageUri);
-
-                        }catch (Exception e){
+                        }
+                        catch (Exception e){
                             Toast.makeText(ActivitySignUp.this,"Изображение не выбрано",Toast.LENGTH_SHORT).show();
                         }
                     }
