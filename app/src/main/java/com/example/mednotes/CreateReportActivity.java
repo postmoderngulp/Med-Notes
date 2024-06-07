@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.util.Patterns;
 import android.view.View;
 import android.widget.Toast;
 
@@ -147,36 +146,24 @@ public class CreateReportActivity extends AppCompatActivity {
             if(!file.exists()){
                 file.mkdirs();
             }
-
             File pdf_file = new File(file.getAbsolutePath() + "/MYPDF" +  getCurrentTime() + "_" + getTodayDate() + ".pdf");
-
             if(!pdf_file.exists()){
                 pdf_file.createNewFile();
             }
-
             PdfWriter writer = new PdfWriter(pdf_file.getAbsoluteFile());
-
             PdfDocument pdfDocument = new PdfDocument(writer);
-
             pdfDocument.addNewPage();
-
             Document document = new Document(pdfDocument);
-
             for(int i = 0; i < items.size();i++) {
                 Paragraph paragraphName = new Paragraph();
                 Paragraph paragraphExamlpe = new Paragraph();
                 Paragraph paragraphFinish = new Paragraph();
-
                 paragraphName.add("Theme: " + items.get(i).name);
                 paragraphExamlpe.add("Example: " + items.get(i).example);
                 paragraphFinish.add("Finish: " + items.get(i).finishing);
-
                 document.add(paragraphName);
                 document.add(paragraphExamlpe);
                 document.add(paragraphFinish);
-
-
-
             }
             document.close();
             Toast.makeText(this,"Отчет сформирован",Toast.LENGTH_SHORT).show();
@@ -188,9 +175,6 @@ public class CreateReportActivity extends AppCompatActivity {
         catch (Exception e) {
             Log.i("client", e.getMessage().toString());
         }
-
-
-
     }
 
 

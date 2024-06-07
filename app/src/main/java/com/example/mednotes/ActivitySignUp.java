@@ -52,14 +52,11 @@ public class ActivitySignUp extends AppCompatActivity {
         binding.btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email = binding.editTextNickname.getText().toString();
+                String email = binding.editTextEmail.getText().toString();
                 String fullname = binding.editTextFullnameSignUp.getText().toString();
                 String password =  binding.editTextPassword.getText().toString();
 
                 List<User> users =  db.getAllUsers();
-
-
-
 
                 if( fullname.isEmpty()|| password.isEmpty() || email.isEmpty()){
                     Toast.makeText(ActivitySignUp.this,"Все поля должны быть заполнены",Toast.LENGTH_SHORT).show();
@@ -77,11 +74,6 @@ public class ActivitySignUp extends AppCompatActivity {
                         return;
                     }
                 }
-
-
-
-
-
 
                 byte[] byteImage = new byte[0];
                 Drawable drawable = binding.Avatar.getDrawable();
