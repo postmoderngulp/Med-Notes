@@ -172,7 +172,7 @@ public class CreateReportActivity extends AppCompatActivity {
             document.setHorizontalAlignment(HorizontalAlignment.CENTER);
             Paragraph paragraph = new Paragraph();
             paragraph.setMarginBottom(20);
-            paragraph.add("Отчет за" + date).setHorizontalAlignment(HorizontalAlignment.CENTER).setVerticalAlignment(VerticalAlignment.MIDDLE).setTextAlignment(TextAlignment.CENTER).setFont(customFont).setFontSize(36);
+            paragraph.add("Отчет за " + date).setHorizontalAlignment(HorizontalAlignment.CENTER).setVerticalAlignment(VerticalAlignment.MIDDLE).setTextAlignment(TextAlignment.CENTER).setFont(customFont).setFontSize(36);
             Table table = new Table(new float[]{1, 1, 1}).setVerticalAlignment(VerticalAlignment.MIDDLE).setHorizontalAlignment(HorizontalAlignment.CENTER);
 
             table.addHeaderCell("Тема").setTextAlignment(TextAlignment.CENTER).setFontSize(28).setFont(customFont);
