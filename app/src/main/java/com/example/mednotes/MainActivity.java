@@ -36,45 +36,53 @@ public class MainActivity extends AppCompatActivity {
 
     public void onButtonClick(View view) {
         String email = binding.editTextNickname.getText().toString();
-        String password =  binding.editTextPassword.getText().toString();
-
+        String password =  binding.editTextPassword.
+                getText().toString();
         if(email.isEmpty() || password.isEmpty()){
-            Toast.makeText(MainActivity.this,"Все поля должны быть заполнены",Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this,
+                    "Все поля должны быть заполнены",
+                    Toast.LENGTH_SHORT).show();
             return;
         }
-
         if( !Patterns.EMAIL_ADDRESS.matcher(email).matches()){
-            Toast.makeText(MainActivity.this,"Неверный формат почты",Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this,
+                    "Неверный формат почты",
+                    Toast.LENGTH_SHORT).show();
             return;
         }
-
         List<User> users =  db.getAllUsers();
-
-
         boolean isDone = false;
         User[] userArray = users.toArray(new User[users.size()]);
-        SharedPreferences sharedPreferences = getSharedPreferences("my_id", Context.MODE_PRIVATE);
-        @SuppressLint("CommitPrefEdits") SharedPreferences.Editor editor = sharedPreferences.edit();
-
-
+        SharedPreferences sharedPreferences =
+                getSharedPreferences("my_id",
+                        Context.MODE_PRIVATE);
+        @SuppressLint("CommitPrefEdits")
+        SharedPreferences.Editor editor = sharedPreferences.edit();
         for (int i = 0;i < userArray.length;i++){
-            if(userArray[i].email.equals(email) && userArray[i].password.equals(password)){
+            if(userArray[i].email.equals(email)
+                    && userArray[i].password.equals(password)){
                 isDone = true;
                 editor.putInt("id", userArray[i].user_id);
                 editor.apply();
-                startActivity(new Intent(this, HomeActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK));
+                startActivity(new Intent(this,
+                        HomeActivity.class)
+                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|
+                                Intent.FLAG_ACTIVITY_CLEAR_TASK));
                 break;
             }
-            else if(userArray[i].email.equals(email) && !userArray[i].password.equals(password)){
-                Toast.makeText(MainActivity.this,"Неверный пароль",Toast.LENGTH_SHORT).show();
+            else if(userArray[i].email.equals(email)
+                    && !userArray[i].password.equals(password)){
+                Toast.makeText(MainActivity.this,
+                        "Неверный пароль",
+                        Toast.LENGTH_SHORT).show();
                 break;
             }
         }
-
         if(!isDone){
-            Toast.makeText(MainActivity.this,"Такого пользователя не существует",Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this,
+                    "Такого пользователя не существует",
+                    Toast.LENGTH_SHORT).show();
         }
-
     }
 
 

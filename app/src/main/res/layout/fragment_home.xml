@@ -6,15 +6,12 @@
     tools:context=".HomeFragment"
     android:background="@color/background"
     >
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        
+        tools:listitem="@layout/item_view"
         />
-
-
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -28,7 +25,6 @@
             android:layout_gravity="bottom|end"
             android:layout_marginBottom="16dp"
             android:src="@android:drawable/ic_menu_day" />
-
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/addnewnote"
             android:layout_width="wrap_content"
@@ -36,10 +32,5 @@
             android:layout_gravity="bottom|end"
             android:layout_margin="@dimen/fab_margin"
             android:src="@android:drawable/ic_input_add" />
-
     </LinearLayout>
-
-
-
-
 </FrameLayout>

@@ -15,10 +15,16 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.mednotes.databinding.ActivityCreateReportBinding;
+import com.itextpdf.kernel.font.PdfFont;
+import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.properties.HorizontalAlignment;
+import com.itextpdf.layout.properties.TextAlignment;
+import com.itextpdf.layout.properties.VerticalAlignment;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -82,7 +88,7 @@ public class CreateReportActivity extends AppCompatActivity {
                     Toast.makeText(CreateReportActivity.this,"Нет задач за этот период",Toast.LENGTH_SHORT).show();
                     return;
                 }
-                createPdf(filterItems);
+                createPdf(filterItems, "неделю" + " ("  + filterItems.get(0).date.substring(0,10) + ")");
             }
         });
 
@@ -92,7 +98,7 @@ public class CreateReportActivity extends AppCompatActivity {
             public void onClick(View v) {
                 List<item> filterItems = new ArrayList<item>();
                 LocalDateTime endTime = LocalDateTime.now();
-                LocalDateTime startTime = endTime.minusDays(7);
+                LocalDateTime startTime = LocalDateTime.now().minusDays(7);
 
                 for(int i = 0;i < items.size();i++){
                     LocalDateTime date = LocalDateTime.parse(items.get(i).getDate());
@@ -104,7 +110,7 @@ public class CreateReportActivity extends AppCompatActivity {
                     Toast.makeText(CreateReportActivity.this,"Нет задач за этот период",Toast.LENGTH_SHORT).show();
                     return;
                 }
-                createPdf(filterItems);
+                createPdf(filterItems,"день" + " ("  + startTime.toString().substring(0,10) + " - " +  endTime.toString().substring(0,10)  + ")");
             }
         });
 
@@ -128,7 +134,7 @@ public class CreateReportActivity extends AppCompatActivity {
                     Toast.makeText(CreateReportActivity.this,"Нет задач за этот период",Toast.LENGTH_SHORT).show();
                     return;
                 }
-                createPdf(filterItems);
+                createPdf(filterItems,"месяц" + " ("  + filterItems.get(0).date.substring(0,7) + ")");
             }
         });
 
@@ -137,39 +143,59 @@ public class CreateReportActivity extends AppCompatActivity {
 
 
 
-    private  void createPdf(List<item> items)  {
+    private  void createPdf(List<item> items,String date)  {
         try{
-            File[] dir = ContextCompat.getExternalFilesDirs(this, null);
+            File[] dir = ContextCompat.getExternalFilesDirs(
+                    this, null);
             String path = dir[0] + "/PDF_Practice";
             File file = new File(path);
+            String fontPath = "res/font/arial.ttf";
+            PdfFont customFont = PdfFontFactory.createFont(fontPath);
+
 
             if(!file.exists()){
                 file.mkdirs();
             }
-            File pdf_file = new File(file.getAbsolutePath() + "/MYPDF" +  getCurrentTime() + "_" + getTodayDate() + ".pdf");
+            File pdf_file = new File(file.getAbsolutePath()
+                    + "/MYPDF" +
+                    getCurrentTime() + "_" + getTodayDate() +
+                    ".pdf");
             if(!pdf_file.exists()){
                 pdf_file.createNewFile();
             }
-            PdfWriter writer = new PdfWriter(pdf_file.getAbsoluteFile());
-            PdfDocument pdfDocument = new PdfDocument(writer);
+            PdfWriter writer = new PdfWriter(pdf_file.
+                    getAbsoluteFile());
+            PdfDocument pdfDocument = new
+                    PdfDocument(writer);
             pdfDocument.addNewPage();
             Document document = new Document(pdfDocument);
+            document.setHorizontalAlignment(HorizontalAlignment.CENTER);
+            Paragraph paragraph = new Paragraph();
+            paragraph.setMarginBottom(20);
+            paragraph.add("Отчет за" + date).setHorizontalAlignment(HorizontalAlignment.CENTER).setVerticalAlignment(VerticalAlignment.MIDDLE).setTextAlignment(TextAlignment.CENTER).setFont(customFont).setFontSize(36);
+            Table table = new Table(new float[]{1, 1, 1}).setVerticalAlignment(VerticalAlignment.MIDDLE).setHorizontalAlignment(HorizontalAlignment.CENTER);
+
+            table.addHeaderCell("Тема").setTextAlignment(TextAlignment.CENTER).setFontSize(28).setFont(customFont);
+            table.addHeaderCell("Задачи").setTextAlignment(TextAlignment.CENTER).setFontSize(28).setFont(customFont);
+            table.addHeaderCell("Сделано").setTextAlignment(TextAlignment.CENTER).setFontSize(28).setFont(customFont);
+
             for(int i = 0; i < items.size();i++) {
-                Paragraph paragraphName = new Paragraph();
-                Paragraph paragraphExamlpe = new Paragraph();
-                Paragraph paragraphFinish = new Paragraph();
-                paragraphName.add("Theme: " + items.get(i).name);
-                paragraphExamlpe.add("Example: " + items.get(i).example);
-                paragraphFinish.add("Finish: " + items.get(i).finishing);
-                document.add(paragraphName);
-                document.add(paragraphExamlpe);
-                document.add(paragraphFinish);
+
+                table.addCell(items.get(i).name).setTextAlignment(TextAlignment.CENTER).setFontSize(28).setFont(customFont);
+                table.addCell(items.get(i).example).setTextAlignment(TextAlignment.CENTER).setFontSize(28).setFont(customFont);
+                table.addCell(items.get(i).finishing).setTextAlignment(TextAlignment.CENTER).setFontSize(28).setFont(customFont);
             }
+            document.add(paragraph);
+            document.add(table);
             document.close();
-            Toast.makeText(this,"Отчет сформирован",Toast.LENGTH_SHORT).show();
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.FrameShare, new ShareFragment(pdf_file.getAbsolutePath()));
+            Toast.makeText(this,"Отчет сформирован",
+                    Toast.LENGTH_SHORT).show();
+            FragmentManager fragmentManager =
+                    getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction =
+                    fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.FrameShare,
+                    new ShareFragment(pdf_file.getAbsolutePath()));
             fragmentTransaction.commit();
         }
         catch (Exception e) {

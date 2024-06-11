@@ -55,26 +55,26 @@ public class ActivitySignUp extends AppCompatActivity {
                 String email = binding.editTextEmail.getText().toString();
                 String fullname = binding.editTextFullnameSignUp.getText().toString();
                 String password =  binding.editTextPassword.getText().toString();
-
                 List<User> users =  db.getAllUsers();
-
                 if( fullname.isEmpty()|| password.isEmpty() || email.isEmpty()){
-                    Toast.makeText(ActivitySignUp.this,"Все поля должны быть заполнены",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ActivitySignUp.this,
+                            "Все поля должны быть заполнены",
+                            Toast.LENGTH_SHORT).show();
                     return;
                 }
-
                 if( !Patterns.EMAIL_ADDRESS.matcher(email).matches()){
-                    Toast.makeText(ActivitySignUp.this,"Неверный формат почты",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ActivitySignUp.this,
+                            "Неверный формат почты",Toast.LENGTH_SHORT).show();
                     return;
                 }
-
                 for(int i = 0; i < users.size();i++){
                     if(users.get(i).email.equals(email)){
-                        Toast.makeText(ActivitySignUp.this,"Такой пользователь уже существует",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ActivitySignUp.this,
+                                "Такой пользователь уже существует",
+                                Toast.LENGTH_SHORT).show();
                         return;
                     }
                 }
-
                 byte[] byteImage = new byte[0];
                 Drawable drawable = binding.Avatar.getDrawable();
                 if(drawable instanceof BitmapDrawable){
@@ -84,20 +84,32 @@ public class ActivitySignUp extends AppCompatActivity {
                     byteImage = stream.toByteArray();
                     byteImage = imagemTratada(byteImage);
                 }
-                User user = new User(email,fullname,"",password,0,"","",byteImage);
+                User user = new User(email,fullname,"",password,
+                        0,"","",byteImage);
                 db.insertUser(user);
                 finish();
-                Toast.makeText(ActivitySignUp.this,"Вы зарегистрировались",Toast.LENGTH_SHORT).show();
+                Toast.makeText(ActivitySignUp.this,
+                        "Вы зарегистрировались",Toast.LENGTH_SHORT).show();
             }
         });
-
     }
-    private byte[] imagemTratada(byte[] imagem_img){
+    private byte[] imagemTratada(
+            byte[] imagem_img){
         while (imagem_img.length > 50000){
-            Bitmap bitmap = BitmapFactory.decodeByteArray(imagem_img, 0, imagem_img.length);
-            Bitmap resized = Bitmap.createScaledBitmap(bitmap, (int)(bitmap.getWidth()*0.8), (int)(bitmap.getHeight()*0.8), true);
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            resized.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            Bitmap bitmap =
+                    BitmapFactory.decodeByteArray(
+                    imagem_img, 0,
+                    imagem_img.length);
+            Bitmap resized =
+                    Bitmap.createScaledBitmap(bitmap,
+                    (int)(bitmap.getWidth()*0.8),
+                    (int)(bitmap.getHeight()*0.8),
+                            true);
+            ByteArrayOutputStream stream =
+                    new ByteArrayOutputStream();
+            resized.compress(
+                    Bitmap.CompressFormat.PNG,
+                    100, stream);
             imagem_img = stream.toByteArray();
         }
         return imagem_img;
