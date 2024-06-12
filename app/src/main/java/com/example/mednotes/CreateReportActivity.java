@@ -88,7 +88,7 @@ public class CreateReportActivity extends AppCompatActivity {
                     Toast.makeText(CreateReportActivity.this,"Нет задач за этот период",Toast.LENGTH_SHORT).show();
                     return;
                 }
-                createPdf(filterItems, "неделю" + " ("  + filterItems.get(0).date.substring(0,10) + ")");
+                createPdf(filterItems, "день" + " ("  + filterItems.get(0).date.substring(0,10) + ")");
             }
         });
 
@@ -110,7 +110,7 @@ public class CreateReportActivity extends AppCompatActivity {
                     Toast.makeText(CreateReportActivity.this,"Нет задач за этот период",Toast.LENGTH_SHORT).show();
                     return;
                 }
-                createPdf(filterItems,"день" + " ("  + startTime.toString().substring(0,10) + " - " +  endTime.toString().substring(0,10)  + ")");
+                createPdf(filterItems,"неделю" + " ("  + startTime.toString().substring(0,10) + " - " +  endTime.toString().substring(0,10)  + ")");
             }
         });
 
